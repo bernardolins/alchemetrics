@@ -1,6 +1,7 @@
 defmodule Alchemetrics do
   alias Alchemetrics.Event
   alias Alchemetrics.Producer
+  alias Alchemetrics.Exometer.Group
 
   @default_options %{
     metadata: %{},
@@ -13,6 +14,15 @@ defmodule Alchemetrics do
     |> Map.put(:value, value)
     |> Event.create
     |> Producer.enqueue
+  end
+
+  def collect(group_name, value, metadata \\ []) when is_atom(group_name) do
+    Group.get_group(group_name) || raise "Group #{inspect group_name} does not exist"
+    metadata = Keyword.take(metadata, Group.metadata_keys(group_name)) |> Enum.into(%{})
+    measures = Group.measures(group_name)
+
+    group_name = to_string(group_name)
+    report(group_name, value, %{metadata: metadata, metrics: measures})
   end
 
   defmacro report_time(metric_name, options, function_body) do
