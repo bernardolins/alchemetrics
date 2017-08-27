@@ -20,19 +20,21 @@ defmodule Alchemetrics.Exometer.Metric do
   }
 
   @metrics Map.merge(@default_metrics, @erlang_metrics)
-  
+
 
   @enforce_keys [:scope, :name, :value]
-  
+
 defstruct [:scope, :datapoints, :name, :value, metadata: %{}]
 
   def from_event(%Alchemetrics.Event{name: name, metrics: metrics, value: value, metadata: metadata}) do
     validate_metrics(metrics)
 
+
     metrics
     |> scopes_for
     |> Enum.map(fn scope ->
-      %Alchemetrics.Exometer.Metric{name: [name, scope], datapoints: datapoints_for(scope, metrics), scope: scope, value: value, metadata: metadata}
+      metric_name = [name, scope, Enum.into(metadata, [])]
+      %Alchemetrics.Exometer.Metric{name: metric_name, datapoints: datapoints_for(scope, metrics), scope: scope, value: value, metadata: metadata}
     end)
   end
 
