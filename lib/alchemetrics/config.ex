@@ -16,6 +16,7 @@ defmodule Alchemetrics.Config do
   defmacro __using__(_) do
     quote do
       import Alchemetrics.Config
+      Application.put_env(:alchemetrics, :config_agent, __MODULE__)
       def load()
       defoverridable [load: 0]
     end
