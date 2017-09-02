@@ -2,13 +2,15 @@ defmodule Alchemetrics.ConsoleReporter do
   use Alchemetrics.CustomReporter
 
   def init(options) do
-    IO.puts "Starting #{__MODULE__} with following options: #{inspect options}"
+    IO.puts "Starting #{__MODULE__}: #{inspect options}"
     {:ok, options}
   end
 
-  def report(public_name, metric, value, options) do
-    IO.puts "Reporting: #{inspect %{name: public_name, metric: metric, value: value, options: options}}"
-    {:ok, options}
+  def report(group, measure, value, metadata, init_opts) do
+    report = [group: group, measure: measure, value: value]
+    |> Enum.concat(metadata)
+    |> Enum.into(%{})
+    IO.inspect report
   end
 end
 
