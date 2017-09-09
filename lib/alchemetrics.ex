@@ -17,9 +17,10 @@ defmodule Alchemetrics do
   end
 
   def collect(group_name, value, metadata \\ []) when is_atom(group_name) do
-    Group.get_group(group_name) || raise "Group #{inspect group_name} does not exist"
-    metadata = Keyword.take(metadata, Group.metadata_keys(group_name)) |> Enum.into(%{})
-    measures = Group.measures(group_name)
+    group = Group.get_group(group_name) || raise "Group #{inspect group_name} does not exist"
+    metadata_keys = Map.get(group, :metadata_keys)
+    metadata = Keyword.take(metadata, metadata_keys) |> Enum.into(%{})
+    measures = Map.get(group, :measures)
 
     group_name = to_string(group_name)
     report(group_name, value, %{metadata: metadata, metrics: measures})
