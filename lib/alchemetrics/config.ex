@@ -1,5 +1,6 @@
 defmodule Alchemetrics.Config do
-  alias Alchemetrics.Exometer.Group
+  alias Alchemetrics.Group
+  alias Alchemetrics.GroupAgent
 
   def start_link do
     GenServer.start_link(__MODULE__, :ok, name: __MODULE__)
@@ -24,7 +25,7 @@ defmodule Alchemetrics.Config do
 
   defmacro group(group_name, do: block) do
     quote do
-      Group.create_group(%Group{name: unquote(group_name)})
+      GroupAgent.create_group(%Group{name: unquote(group_name)})
 
       var!(group_name, Alchemetrics.Config) = unquote(group_name)
       unquote(block)
@@ -34,7 +35,7 @@ defmodule Alchemetrics.Config do
   defmacro set(key, value) do
     quote do
       group_name = var!(group_name, Alchemetrics.Config)
-      Group.set(group_name, unquote(key), unquote(value))
+      GroupAgent.set(group_name, unquote(key), unquote(value))
     end
   end
 

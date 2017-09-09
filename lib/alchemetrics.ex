@@ -1,7 +1,7 @@
 defmodule Alchemetrics do
   alias Alchemetrics.Event
   alias Alchemetrics.Producer
-  alias Alchemetrics.Exometer.Group
+  alias Alchemetrics.GroupAgent
 
   @default_options %{
     metadata: %{},
@@ -17,7 +17,7 @@ defmodule Alchemetrics do
   end
 
   def collect(group_name, value, metadata \\ []) when is_atom(group_name) do
-    group = Group.get_group(group_name) || raise "Group #{inspect group_name} does not exist"
+    group = GroupAgent.get_group(group_name) || raise "Group #{inspect group_name} does not exist"
     metadata_keys = Map.get(group, :metadata_keys)
     metadata = Keyword.take(metadata, metadata_keys) |> Enum.into(%{})
     measures = Map.get(group, :measures)

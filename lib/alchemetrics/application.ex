@@ -16,7 +16,7 @@ defmodule Alchemetrics.Application do
       worker(Alchemetrics.BuiltinMetrics.Beam, []),
       worker(Alchemetrics.Producer, []),
       worker(Alchemetrics.Consumer, []),
-      worker(Alchemetrics.Exometer.Group, []),
+      worker(Alchemetrics.GroupAgent, []),
       worker(Alchemetrics.Config, [])
     ]
 
