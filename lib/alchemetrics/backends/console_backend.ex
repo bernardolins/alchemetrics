@@ -37,10 +37,10 @@ defmodule Alchemetrics.ConsoleBackend do
   end
 
   def report(metadata, datapoint, value, options) do
-    metadata = Enum.into(metadata, %{})
+    #metadata = Enum.into(metadata, %{})
+    metadata = %{metadata: metadata}
     base_report = %{datapoint: datapoint, value: value, options: options}
     IO.inspect Map.merge(base_report, metadata)
     {:ok, options}
   end
 end
-

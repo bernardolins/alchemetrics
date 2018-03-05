@@ -3,6 +3,6 @@
 # exometer_report behaviour
 defmodule FakeBackend do
   use Alchemetrics.CustomBackend
-  def init(_), do: {:ok, []}
+  def init(opts), do: {:ok, opts}
   def report(_,_,_,_), do: {:ok, []}
 end
