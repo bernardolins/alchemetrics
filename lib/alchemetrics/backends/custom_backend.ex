@@ -6,7 +6,6 @@ defmodule Alchemetrics.CustomBackend do
   @type state :: Map.t | Keyword.t
   @type init_opts :: Keyword.t | Map.t
 
-  @callback init(init_opts) :: {:ok, state} | {:ok, Keyword.t} | {:error, String.t} | {:error, Atom.t}
   @callback report(metadata, measure, value, state) :: any
 
   @moduledoc """
@@ -86,22 +85,18 @@ defmodule Alchemetrics.CustomBackend do
       use GenServer
       @behaviour Alchemetrics.CustomBackend
 
-      @doc false
-      def start_link(opts \\ []), do: GenServer.start_link(__MODULE__, opts, [name: __MODULE__])
-
-      @doc """
-      Enables the reporter. All datasets created **after** the reporter is enabled will subscribe to this reporter.
-
-      ## Params
-        - `options`: Start up options.
-      """
       def enable(options \\ [])
-      def enable(options) when is_list(options), do: __MODULE__.start_link(options)
+      def enable(options) when is_list(options) do
+        GenServer.start_link(__MODULE__, options, [name: __MODULE__])
+      end
       def enable(options), do: raise ArgumentError, "Invalid options #{inspect options}. Must be a Keyword list"
+
+      def disable, do: GenServer.stop(__MODULE__)
+      def terminate(_, _), do: :ok
 
       @doc false
       def do_report(report_info) do
-        {name, data_points} = Keyword.pop(report_info, :name)
+        {name, data_points} = Keyword.pop(report_info, :labels)
 
         Enum.each(data_points, fn({data_point, value}) ->
           GenServer.cast(__MODULE__, {:report, name, data_point, value})
