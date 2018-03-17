@@ -54,6 +54,7 @@
   defp deps do
     [
       {:gen_stage, "~> 0.12"},
+      {:poolboy, "~> 1.5.1"},
       {:exometer_core, "~> 1.0"},
       {:ex_doc, ">= 0.0.0", only: :dev},
       {:mock, "~> 0.3.1", only: :test},
