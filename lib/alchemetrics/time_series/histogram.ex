@@ -1,4 +1,4 @@
-defmodule Alchemetrics.TimeSeries.Manager do
+defmodule Alchemetrics.TimeSeries.Histogram do
   use GenServer
 
   def start_link do
@@ -24,12 +24,12 @@ defmodule Alchemetrics.TimeSeries.Manager do
   end
 
   defp pid_for_labels(labels) do
-    case :ets.lookup(:time_series_manager_pids, labels) do
+    case :ets.lookup(:histogram_pids, labels) do
       [{_, pid}] ->
         pid
       [] ->
         {:ok, pid} = start_link()
-        :ets.insert(:time_series_manager_pids, {labels, pid})
+        :ets.insert(:histogram_pids, {labels, pid})
     end
   end
 
