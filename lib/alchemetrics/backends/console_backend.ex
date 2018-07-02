@@ -36,6 +36,11 @@ defmodule Alchemetrics.ConsoleBackend do
     {:ok, options}
   end
 
+  def terminate(reason, _) do
+    IO.puts "Stopping #{__MODULE__}: #{inspect reason}"
+    {:ok, reason}
+  end
+
   def report(metadata, datapoint, value, options) do
     #metadata = Enum.into(metadata, %{})
     metadata = %{metadata: metadata}

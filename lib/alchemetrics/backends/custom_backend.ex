@@ -85,14 +85,22 @@ defmodule Alchemetrics.CustomBackend do
       use GenServer
       @behaviour Alchemetrics.CustomBackend
 
-      def enable(options \\ [])
-      def enable(options) when is_list(options) do
+      @doc false
+      def start_link(options \\ [])
+      def start_link(options) when is_list(options) do
         GenServer.start_link(__MODULE__, options, [name: __MODULE__])
       end
-      def enable(options), do: raise ArgumentError, "Invalid options #{inspect options}. Must be a Keyword list"
+      def start_link(options), do: raise ArgumentError, "Invalid options #{inspect options}. Must be a Keyword list"
 
-      def disable, do: GenServer.stop(__MODULE__)
-      def terminate(_, _), do: :ok
+      def enable(options \\ []) do
+        start_link(options)
+        Alchemetrics.Backends.Manager.set_enabled(__MODULE__)
+      end
+
+      def disable do
+        GenServer.stop(__MODULE__)
+        Alchemetrics.Backends.Manager.set_disabled(__MODULE__)
+      end
 
       @doc false
       def do_report(report_info) do
