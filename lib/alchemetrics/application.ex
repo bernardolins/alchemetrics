@@ -16,6 +16,8 @@ defmodule Alchemetrics.Application do
       worker(Alchemetrics.Predefined.Beam, []),
       worker(Alchemetrics.Producer, []),
       worker(Alchemetrics.Consumer, []),
+
+      Alchemetrics.Registry.Group,
     ]
 
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html
