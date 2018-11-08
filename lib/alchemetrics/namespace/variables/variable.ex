@@ -8,7 +8,7 @@ defmodule Alchemetrics.Variable do
   defmacro __using__(initial_value: initial_value) do
     quote do
       use Alchemetrics.Member
-      @behaviour Variable
+      @behaviour Alchemetrics.Variable
 
       def set_info(options) do
         {:ok, unquote(initial_value)}
