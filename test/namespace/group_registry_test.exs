@@ -3,47 +3,47 @@ defmodule Alchemetrics.Registry.GroupTest do
   alias Alchemetrics.Registry.Group
 
   setup do
-    Registry.unregister_match(Alchemetrics.Registry.Group, :channel, [])
-    Registry.unregister_match(Alchemetrics.Registry.Group, :channel1, [])
-    Registry.unregister_match(Alchemetrics.Registry.Group, :channel2, [])
-    Registry.unregister_match(Alchemetrics.Registry.Group, :channel3, [])
+    Registry.unregister_match(Alchemetrics.Registry.Group, :group, [])
+    Registry.unregister_match(Alchemetrics.Registry.Group, :group1, [])
+    Registry.unregister_match(Alchemetrics.Registry.Group, :group2, [])
+    Registry.unregister_match(Alchemetrics.Registry.Group, :group3, [])
   end
 
   describe "#register" do
-    test "register a new topic if no topic is registered for the same channel" do
-      assert Registry.lookup(Alchemetrics.Registry.Group, :channel) == []
-      assert :ok == Group.register(:channel)
-      assert Registry.lookup(Alchemetrics.Registry.Group, :channel) == [{self(), []}]
+    test "register a new topic if no topic is registered for the same group" do
+      assert Registry.lookup(Alchemetrics.Registry.Group, :group) == []
+      assert :ok == Group.register(:group)
+      assert Registry.lookup(Alchemetrics.Registry.Group, :group) == [{self(), []}]
     end
 
-    test "register a new topic and channel options if no topic is registered for the same channel" do
-      assert Registry.lookup(Alchemetrics.Registry.Group, :channel) == []
-      assert :ok == Group.register(:channel, [some: "option"])
-      assert Registry.lookup(Alchemetrics.Registry.Group, :channel) == [{self(), [some: "option"]}]
+    test "register a new topic and group options if no topic is registered for the same group" do
+      assert Registry.lookup(Alchemetrics.Registry.Group, :group) == []
+      assert :ok == Group.register(:group, [some: "option"])
+      assert Registry.lookup(Alchemetrics.Registry.Group, :group) == [{self(), [some: "option"]}]
     end
 
-    test "can't reg:channelister the same topic twice for a channel" do
-      assert Registry.lookup(Alchemetrics.Registry.Group, :channel) == []
-      assert :ok == Group.register(:channel)
-      assert {:error, {:already_registered, self()}} == Group.register(:channel)
+    test "can't register the same topic twice for a group" do
+      assert Registry.lookup(Alchemetrics.Registry.Group, :group) == []
+      assert :ok == Group.register(:group)
+      assert {:error, {:already_registered, self()}} == Group.register(:group)
     end
 
-    test "can reg:channelister several topics for a channel" do
-      assert Registry.lookup(Alchemetrics.Registry.Group, :channel) == []
-      assert :ok == Group.register(:channel1)
-      assert :ok == Group.register(:channel2)
-      assert :ok == Group.register(:channel3)
+    test "can register several topics for a group" do
+      assert Registry.lookup(Alchemetrics.Registry.Group, :group) == []
+      assert :ok == Group.register(:group1)
+      assert :ok == Group.register(:group2)
+      assert :ok == Group.register(:group3)
     end
   end
 
   describe "#lookup" do
     test "returns not_found when the topic does not exist" do
-      assert {:error, :not_found} == Group.lookup(:channel)
+      assert {:error, :not_found} == Group.lookup(:group)
     end
 
     test "returns ok and the pid of the topic when the topic is found" do
-      assert :ok == Group.register(:channel)
-      assert {:ok, {self(), []}} == Group.lookup(:channel)
+      assert :ok == Group.register(:group)
+      assert {:ok, {self(), []}} == Group.lookup(:group)
     end
   end
 end
