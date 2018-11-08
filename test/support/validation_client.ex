@@ -8,19 +8,19 @@ defmodule Alchemetrics.Support.ValidationMember do
       [pid: test_process_id] ->
         send(test_process_id, {:set_info_called, self() })
         {:ok, test_process_id}
-      [pid: test_process_id, join_channels: _] ->
+      [pid: test_process_id, join_groups: _] ->
         {:ok, test_process_id}
       _ ->
         {:ok, nil}
     end
   end
 
-  def handle_join(channel, test_process_id) do
-    case channel do
+  def handle_join(group, test_process_id) do
+    case group do
       :invalid_return ->
         {:invalid, :invalid_return}
       :test_callback ->
-        send(test_process_id, {:handle_join_called, channel, self()})
+        send(test_process_id, {:handle_join_called, group, self()})
         {:ok, test_process_id}
       _ ->
         {:ok, test_process_id}
